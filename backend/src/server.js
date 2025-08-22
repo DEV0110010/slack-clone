@@ -1,5 +1,6 @@
 import express from "express";
 import { ENV } from "./config/env.js";
+import { connectDB } from "./config/db.js";
 
 const app = express();
 
@@ -7,9 +8,11 @@ const app = express();
 app.get('/', (req, res) => {
   res.send("Hello World! 123456")});
 
-  console.log("mongo URI:", ENV.MONGO_URI);
+
   
 
 
 app.listen(ENV.PORT, () => {
-  console.log(`Server running on port:`, ENV.PORT)});
+  console.log(`Server running on port:`, ENV.PORT)
+  connectDB()
+});
