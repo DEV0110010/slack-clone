@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 const BASE_URL = import.meta.env.MODE === 'dvelopment'
-? "http://localhost:5001/" : "https://slack-clone-nine-navy.vercel.app/";
+? "http://localhost:5001/api" : "https://slack-clone-nine-navy.vercel.app/api";
 
 
 export const axiosInstance = axios.create({
