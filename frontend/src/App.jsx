@@ -1,9 +1,10 @@
-import { SignedIn, SignedOut, useAuth, UserButton } from '@clerk/clerk-react';
+import { useAuth } from '@clerk/clerk-react';
 import { Navigate, Route, Routes } from 'react-router';
 import AuthPage from './pages/AuthPage';
 import HomePage from './pages/HomePAge';
 
 import * as Sentry from "@sentry/react";
+import CallPage from './pages/CallPage';
 
 const SentryRoutes = Sentry.withSentryReactRouterV7Routing(Routes);
 
