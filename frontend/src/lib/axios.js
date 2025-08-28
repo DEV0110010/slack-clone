@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 
-const BASE_URL = import.meta.env.MODE === 'dvelopment'
+const BASE_URL = import.meta.env.MODE === 'development'
 ? "http://localhost:5001/api" : "https://slack-clone-nine-navy.vercel.app/api";
 
 
