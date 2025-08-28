@@ -1,15 +1,94 @@
-import { UserButton } from '@clerk/clerk-react'
-import React from 'react'
-import { useStreamChat } from '../hooks/useStreamchat';
+import { UserButton } from "@clerk/clerk-react";
+import { PlusIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router";
+import {
+  Channel,
+  ChannelList,
+  Chat,
+  MessageInput,
+  MessageList,
+  Window,
+  Thread,
+} from "stream-chat-react";
+import CustomChannelHeader from "../components/CustomChannelHeader";
+import ErrorMessage from "../components/ErrorMessage";
+import PageLoader from "../components/PageLoader";
+import { useStreamChat } from "../hooks/useStreamchat";
+import "../styles/stream-chat-theme.css";
+import CreateChannelModal from "../components/CreateChannelModal";
 
 const HomePage = () => {
-   const { chatClient, error, isLoading } = useStreamChat();
-  return (
-    <div>
-      <UserButton/>
-    Home Page
-    </div>
-  )
-}
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [activeChannel, setActiveChannel] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-export default HomePage
+  const { chatClient, error, isLoading } = useStreamChat();
+
+  useEffect(() => {
+    if (chatClient) {
+      const channelId = searchParams.get("channel");
+      if (channelId) {
+        const channel = chatClient.channel("messaging", channelId);
+        setActiveChannel(channel);
+      }
+    }
+  }, [chatClient, searchParams]);
+
+  if (error) return <ErrorMessage message={error.message} />;
+  if (isLoading || !chatClient) return <PageLoader />;
+
+  return (
+    <div className="chat-wrapper">
+      <Chat client={chatClient}>
+        <div className="chat-container">
+          {/* left sidebar */}
+          <div className="str-chat__channel-list">
+            <div className="team-channel-list">
+              {/* Header component */}
+              <div className="team-channel-list__header gap-4">
+                <div className="brand-container">
+                  <img src="/logo.png" alt="Logo" className="brand-logo" />
+                  <span className="brand-name">Slap</span>
+                </div>
+                <div className="user-button-wrapper">
+                  <UserButton />
+                </div>
+              </div>
+              {/* Channels list */}
+              <div className="team-channel-list__content">
+                <div className="create-channel-section">
+                  <button
+                    onClick={() => setIsCreateModalOpen(true)}
+                    className="create-channel-btn"
+                  >
+                    <PlusIcon className="size-4" />
+                    <span>Create Channel</span>
+                  </button>
+                </div>
+                {/* channel list */}
+                <ChannelList></ChannelList>
+              </div>
+            </div>
+          </div>
+          {/* right container */}
+          <div className="chat-main">
+            <Channel channel={activeChannel}>
+              <Window>
+                <CustomChannelHeader />
+                <MessageList />
+                <MessageInput />
+              </Window>
+              <Thread />
+            </Channel>
+          </div>
+        </div>
+        {isCreateModalOpen && (
+          <CreateChannelModal onClose={() => setIsCreateModalOpen(false)} />
+        )}
+      </Chat>
+    </div>
+  );
+};
+
+export default HomePage;
