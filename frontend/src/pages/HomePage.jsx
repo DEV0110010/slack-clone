@@ -1,5 +1,5 @@
 import { UserButton } from "@clerk/clerk-react";
-import { PlusIcon } from "lucide-react";
+import { HashIcon, PlusIcon, UsersIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 import {
@@ -17,6 +17,10 @@ import PageLoader from "../components/PageLoader";
 import { useStreamChat } from "../hooks/useStreamchat";
 import "../styles/stream-chat-theme.css";
 import CreateChannelModal from "../components/CreateChannelModal";
+import CustomChannelPreview from "../components/CustomChannelPreview";
+import InlineLoader from "../components/InlineLoader";
+import InlineError from "../components/InlineError";
+import UsersList from "../components/UsersList";
 
 const HomePage = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -67,7 +71,46 @@ const HomePage = () => {
                   </button>
                 </div>
                 {/* channel list */}
-                <ChannelList></ChannelList>
+                <ChannelList
+                  filters={{ members: { $in: [chatClient?.user?.id] } }}
+                  options={{ state: true, watch: true }}
+                  Preview={({ channel }) => (
+                    <CustomChannelPreview
+                      channel={channel}
+                      activeChannel={activeChannel}
+                      setActiveChannel={(channel) =>
+                        setSearchParams({ channel: channel.id })
+                      }
+                    />
+                  )}
+                  List={({ children, loading, error }) => (
+                    <div className="channel-sections">
+                      <div className="section-header">
+                        <div className="section-title">
+                          <HashIcon className="size-4" />
+                          <span>Channels</span>
+                        </div>
+                      </div>
+
+                      {loading && (
+                        <InlineLoader message="Loading channels..." />
+                      )}
+                      {error && (
+                        <InlineError message="Error loading channels" />
+                      )}
+
+                      <div className="channels-list">{children}</div>
+                      
+                      <div className="section-header direct-messages">
+                        <div className="section-title">
+                          <UsersIcon className="size-4" />
+                          <span>Direct Messages</span>
+                        </div>
+                      </div>
+                      <UsersList activeChannel={activeChannel} />
+                    </div>
+                  )}
+                />
               </div>
             </div>
           </div>

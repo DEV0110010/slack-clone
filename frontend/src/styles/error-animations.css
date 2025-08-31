@@ -1,0 +1,42 @@
+/* Slide + fade in */
+@keyframes error-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.9);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(2px) scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Gentle shake */
+@keyframes error-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+
+/* Glow pulse */
+@keyframes error-glow {
+  0%, 100% {
+    box-shadow: 0 0 0px rgba(239, 68, 68, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.8);
+  }
+}
+
+/* Apply all */
+.error-message {
+  animation:
+    error-slide-in 0.5s ease-out,
+    error-shake 0.4s ease-in-out 0.5s,
+    error-glow 2s infinite ease-in-out 1s;
+}
