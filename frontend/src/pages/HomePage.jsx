@@ -42,35 +42,33 @@ const HomePage = () => {
   if (error) return <ErrorMessage message={error.message} />;
   if (isLoading || !chatClient) return <PageLoader />;
 
-  return (
+ return (
     <div className="chat-wrapper">
       <Chat client={chatClient}>
         <div className="chat-container">
-          {/* left sidebar */}
+          {/* LEFT SIDEBAR */}
           <div className="str-chat__channel-list">
             <div className="team-channel-list">
-              {/* Header component */}
+              {/* HEADER */}
               <div className="team-channel-list__header gap-4">
                 <div className="brand-container">
                   <img src="/logo.png" alt="Logo" className="brand-logo" />
-                  <span className="brand-name">Slap</span>
+                  <span className="brand-name">Convo</span>
                 </div>
                 <div className="user-button-wrapper">
                   <UserButton />
                 </div>
               </div>
-              {/* Channels list */}
+              {/* CHANNELS LIST */}
               <div className="team-channel-list__content">
                 <div className="create-channel-section">
-                  <button
-                    onClick={() => setIsCreateModalOpen(true)}
-                    className="create-channel-btn"
-                  >
+                  <button onClick={() => setIsCreateModalOpen(true)} className="create-channel-btn">
                     <PlusIcon className="size-4" />
                     <span>Create Channel</span>
                   </button>
                 </div>
-                {/* channel list */}
+
+                {/* CHANNEL LIST */}
                 <ChannelList
                   filters={{ members: { $in: [chatClient?.user?.id] } }}
                   options={{ state: true, watch: true }}
@@ -78,9 +76,7 @@ const HomePage = () => {
                     <CustomChannelPreview
                       channel={channel}
                       activeChannel={activeChannel}
-                      setActiveChannel={(channel) =>
-                        setSearchParams({ channel: channel.id })
-                      }
+                      setActiveChannel={(channel) => setSearchParams({ channel: channel.id })}
                     />
                   )}
                   List={({ children, loading, error }) => (
@@ -92,15 +88,12 @@ const HomePage = () => {
                         </div>
                       </div>
 
-                      {loading && (
-                        <InlineLoader message="Loading channels..." />
-                      )}
-                      {error && (
-                        <InlineError message="Error loading channels" />
-                      )}
+                      {/* todos: add better components here instead of just a simple text  */}
+                      {loading && <div className="loading-message">Loading channels...</div>}
+                      {error && <div className="error-message">Error loading channels</div>}
 
                       <div className="channels-list">{children}</div>
-                      
+
                       <div className="section-header direct-messages">
                         <div className="section-title">
                           <UsersIcon className="size-4" />
@@ -114,7 +107,8 @@ const HomePage = () => {
               </div>
             </div>
           </div>
-          {/* right container */}
+
+          {/* RIGHT CONTAINER */}
           <div className="chat-main">
             <Channel channel={activeChannel}>
               <Window>
@@ -122,13 +116,13 @@ const HomePage = () => {
                 <MessageList />
                 <MessageInput />
               </Window>
+
               <Thread />
             </Channel>
           </div>
         </div>
-        {isCreateModalOpen && (
-          <CreateChannelModal onClose={() => setIsCreateModalOpen(false)} />
-        )}
+
+        {isCreateModalOpen && <CreateChannelModal onClose={() => setIsCreateModalOpen(false)} />}
       </Chat>
     </div>
   );
