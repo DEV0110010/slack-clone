@@ -49,13 +49,13 @@ const CreateChannelModal = ({ onClose }) => {
     fetchUsers();
   }, [client]);
 
-  useEffect(() => {
-    setChannelName("");
-    setDescription("");
-    setChannelType("public");
-    setError("");
-    setSelectedMembers([]);
-  }, []);
+  // useEffect(() => {
+  //   setChannelName("");
+  //   setDescription("");
+  //   setChannelType("public");
+  //   setError("");
+  //   setSelectedMembers([]);
+  // }, []);
 
   useEffect(() => {
     if (channelType === "public") setSelectedMembers(users.map((u) => u.id));
